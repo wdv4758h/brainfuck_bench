@@ -8,13 +8,13 @@ import os
 # So that you can still run this module under standard CPython, I add this
 # import guard that creates a dummy class instead.
 try:
-    from rpython.rlib.jit import JitDriver, purefunction
+    from rpython.rlib.jit import JitDriver, elidable
 except ImportError:
     class JitDriver(object):
         def __init__(self,**kw): pass
         def jit_merge_point(self,**kw): pass
         def can_enter_jit(self,**kw): pass
-    def purefunction(f): return f
+    def elidable(f): return f
 
 try:
     from rpython.rlib.rstring import replace
@@ -33,7 +33,7 @@ jitdriver = JitDriver(
                 get_printable_location=get_location,
             )
 
-@purefunction
+@elidable
 def get_matching_bracket(bracket_map, pc):
     return bracket_map[pc]
 
